@@ -18,7 +18,7 @@ export class AuthService {
   get loggedIn(): boolean { return !!this.token; }
 
   login(email: string, password: string) {
-    return this.api.post('/auth/login', { email, password }).pipe(
+    return this.api.post('/auth/login', { email, password }, { direct: true }).pipe(
       tap((r: any) => {
         const t = r.token || r.data?.token;
         const u = r.user || r.data?.user;
@@ -28,7 +28,7 @@ export class AuthService {
     );
   }
   register(name: string, email: string, password: string, role: string) {
-    return this.api.post('/auth/register', { name, email, password, role }).pipe(
+    return this.api.post('/auth/register', { name, email, password, role }, { direct: true }).pipe(
       tap((r: any) => {
         const t = r.token || r.data?.token;
         const u = r.user || r.data?.user;

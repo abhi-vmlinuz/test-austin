@@ -1,4 +1,4 @@
-# Catch2Export — Catch-to-Export Seafood Traceability Platform
+# Marine Origin — Catch-to-Export Seafood Traceability Platform
 
 > Every kilogram has a digital identity.
 

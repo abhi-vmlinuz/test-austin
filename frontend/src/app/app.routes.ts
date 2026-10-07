@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { authGuard } from './core/guards';
+import { authGuard, roleGuard } from './core/guards';
 import { LandingComponent } from './pages/landing.component';
 import { LoginComponent } from './pages/login.component';
 import { RegisterComponent } from './pages/register.component';
@@ -25,6 +25,7 @@ import { ReportsComponent } from './pages/reports.component';
 import { AdminComponent } from './pages/admin.component';
 import { DocumentsComponent } from './pages/documents.component';
 import { ProfileComponent } from './pages/profile.component';
+import { ForbiddenComponent } from './pages/forbidden.component';
 
 export const routes: Routes = [
   { path: '', component: LandingComponent },
@@ -37,26 +38,27 @@ export const routes: Routes = [
     canActivate: [authGuard],
     children: [
       { path: 'dashboard', component: DashboardComponent },
-      { path: 'raw-batches', component: RawListComponent },
-      { path: 'raw-batches/create', component: RawCreateComponent },
-      { path: 'source/raw-batches/create', component: RawCreateComponent },
-      { path: 'raw-batches/:id', component: RawDetailComponent },
-      { path: 'processing', component: ProcessingComponent },
-      { path: 'processing-groups/:id', component: PgDetailComponent },
-      { path: 'quality', component: QualityComponent },
-      { path: 'inventory', component: InventoryComponent },
-      { path: 'inventory/:id', component: InvDetailComponent },
-      { path: 'storage', component: StorageComponent },
-      { path: 'orders', component: OrdersComponent },
-      { path: 'orders/create', component: OrderCreateComponent },
-      { path: 'orders/:id', component: OrderDetailComponent },
-      { path: 'export-groups', component: EgListComponent },
-      { path: 'export-groups/:id', component: EgDetailComponent },
-      { path: 'shipments', component: ShipmentsComponent },
-      { path: 'reports', component: ReportsComponent },
-      { path: 'admin', component: AdminComponent },
-      { path: 'documents', component: DocumentsComponent },
+      { path: 'raw-batches', component: RawListComponent, canActivate: [roleGuard('ADMIN', 'SOURCE_OPERATOR', 'PROCESSOR')] },
+      { path: 'raw-batches/create', component: RawCreateComponent, canActivate: [roleGuard('ADMIN', 'SOURCE_OPERATOR', 'PROCESSOR')] },
+      { path: 'source/raw-batches/create', component: RawCreateComponent, canActivate: [roleGuard('ADMIN', 'SOURCE_OPERATOR', 'PROCESSOR')] },
+      { path: 'raw-batches/:id', component: RawDetailComponent, canActivate: [roleGuard('ADMIN', 'SOURCE_OPERATOR', 'PROCESSOR')] },
+      { path: 'processing', component: ProcessingComponent, canActivate: [roleGuard('ADMIN', 'PROCESSOR')] },
+      { path: 'processing-groups/:id', component: PgDetailComponent, canActivate: [roleGuard('ADMIN', 'PROCESSOR')] },
+      { path: 'quality', component: QualityComponent, canActivate: [roleGuard('ADMIN', 'QUALITY_INSPECTOR')] },
+      { path: 'inventory', component: InventoryComponent, canActivate: [roleGuard('ADMIN', 'PROCESSOR', 'EXPORTER')] },
+      { path: 'inventory/:id', component: InvDetailComponent, canActivate: [roleGuard('ADMIN', 'PROCESSOR', 'EXPORTER')] },
+      { path: 'storage', component: StorageComponent, canActivate: [roleGuard('ADMIN', 'PROCESSOR', 'EXPORTER')] },
+      { path: 'orders', component: OrdersComponent, canActivate: [roleGuard('ADMIN', 'EXPORTER', 'IMPORTER')] },
+      { path: 'orders/create', component: OrderCreateComponent, canActivate: [roleGuard('ADMIN', 'IMPORTER')] },
+      { path: 'orders/:id', component: OrderDetailComponent, canActivate: [roleGuard('ADMIN', 'EXPORTER', 'IMPORTER')] },
+      { path: 'export-groups', component: EgListComponent, canActivate: [roleGuard('ADMIN', 'EXPORTER')] },
+      { path: 'export-groups/:id', component: EgDetailComponent, canActivate: [roleGuard('ADMIN', 'EXPORTER')] },
+      { path: 'shipments', component: ShipmentsComponent, canActivate: [roleGuard('ADMIN', 'EXPORTER')] },
+      { path: 'reports', component: ReportsComponent, canActivate: [roleGuard('ADMIN', 'EXPORTER', 'PROCESSOR')] },
+      { path: 'admin', component: AdminComponent, canActivate: [roleGuard('ADMIN')] },
+      { path: 'documents', component: DocumentsComponent, canActivate: [roleGuard('ADMIN', 'EXPORTER')] },
       { path: 'profile', component: ProfileComponent },
+      { path: 'forbidden', component: ForbiddenComponent },
     ]
   },
   { path: '**', redirectTo: '' }

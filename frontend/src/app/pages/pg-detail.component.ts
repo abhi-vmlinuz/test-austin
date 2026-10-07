@@ -10,15 +10,18 @@ import { TimelineComponent } from '../shared/timeline.component';
   standalone: true,
   imports: [CommonModule, RouterLink, StatusBadgeComponent, TimelineComponent],
   template: `
-  <a routerLink="/processing" class="text-sm text-ocean-dark font-bold">← Processing</a>
-  <div *ngIf="g" class="card mt-3">
-    <h1 class="text-2xl font-extrabold text-navy">{{ g.processing_group_code || g.code }}</h1>
-    <div class="text-sm text-slate-500">{{ g.species }} • {{ g.quantity }} kg</div>
+  <div class="mo-wrap">
+  <a routerLink="/processing" class="text-sm font-bold" style="color:#2173B5;">← Processing</a>
+  <div *ngIf="g" class="mo-card" style="margin-top:.75rem;">
+    <div class="mo-topline"><div class="mo-code">PROCESSING GROUP</div><span class="mo-brand">MARINE ORIGIN</span></div>
+    <h1 class="mo-title" style="margin-top:.25rem;">{{ g.processing_group_code || g.code }}</h1>
+    <div class="mo-sub">{{ g.species }} • {{ g.quantity }} kg</div>
     <div class="mt-2"><app-status-badge [status]="g.status || 'WAITING_FOR_QUALITY'"></app-status-badge></div>
     <div class="text-xs text-slate-500 mt-2">Raw batch: {{ g.raw_batch_code || g.batch_code || '—' }} • Input {{ g.input_quantity || '—' }} → Output {{ g.output_quantity || g.quantity }} • Waste {{ g.waste_quantity || '—' }}</div>
-    <div class="mt-3 flex gap-2"><a routerLink="/quality" class="btn-ocean">Send to quality →</a></div>
+    <div class="mt-3"><span class="text-xs font-bold text-slate-500 bg-slate-100 rounded-full px-3 py-2">Quality handoff: the inspector picks this group from the quality queue.</span></div>
   </div>
-  <div class="card mt-4"><h3 class="font-bold text-navy mb-3">Trace</h3><app-timeline [steps]="steps"></app-timeline></div>`
+  <div class="card mt-4"><h3 class="font-bold text-navy mb-3">Trace</h3><app-timeline [steps]="steps"></app-timeline></div>
+  </div>`
 })
 export class PgDetailComponent implements OnInit {
   private route = inject(ActivatedRoute);

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ApiService } from '../core/api.service';
 import { ToastService } from '../core/toast.service';
+import { AuthService } from '../core/auth.service';
 import { StatusBadgeComponent } from '../shared/status-badge.component';
 
 @Component({
@@ -10,24 +11,27 @@ import { StatusBadgeComponent } from '../shared/status-badge.component';
   standalone: true,
   imports: [CommonModule, RouterLink, StatusBadgeComponent],
   template: `
-  <a routerLink="/orders" class="text-sm text-ocean-dark font-bold">← Orders</a>
-  <div *ngIf="o" class="card mt-3">
-    <div class="flex flex-wrap items-start gap-3">
-      <div class="flex-1"><h1 class="text-2xl font-extrabold text-navy">{{ o.order_code || ('ORD-' + (o.order_id || o.id)) }}</h1>
-      <div class="text-sm text-slate-500">{{ o.destination_country || o.destination }} • {{ o.shipping_method }} • Required {{ o.required_date || '' }}</div>
-      <div class="mt-2"><app-status-badge [status]="o.status"></app-status-badge></div></div>
-      <div class="flex flex-wrap gap-2">
-        <button (click)="setStatus('ACCEPTED')" class="btn-primary !py-2">Accept</button>
-        <button (click)="setStatus('REJECTED')" class="btn-outline !py-2" (dblclick)="setStatus('REJECTED')">Reject</button>
-        <button (click)="validate()" class="btn-outline !py-2">Validate</button>
-        <button (click)="allocate()" class="btn-ocean !py-2">🧠 Smart Allocate</button>
+  <div class="mo-wrap">
+    <a routerLink="/orders" class="text-sm font-bold" style="color:#2173B5;">← Orders</a>
+    <div *ngIf="o" class="mo-card" style="margin-top:.75rem;">
+      <div class="mo-topline"><div class="mo-code">IMPORTER ORDER</div><span class="mo-brand">MARINE ORIGIN</span></div>
+      <h1 class="mo-title" style="margin-top:.25rem;">{{ o.order_code || ('ORD-' + (o.order_id || o.id)) }}</h1>
+      <div class="mo-sub">{{ o.destination_country || o.destination }} • {{ o.shipping_method }} • Required {{ o.required_date || '' }}</div>
+      <div class="mt-2"><app-status-badge [status]="o.status"></app-status-badge></div>
+      <div class="mt-3 text-sm"><b>Items:</b><div *ngFor="let it of items" class="text-slate-600">{{ it.species }} → {{ it.required_quantity }} kg → min score {{ it.minimum_quality_score }}</div></div>
+      <div *ngIf="canManage()" style="margin-top:1rem;">
+        <button (click)="setStatus('ACCEPTED')" class="mo-cta" style="margin-top:0;">Accept order</button>
+        <button (click)="setStatus('REJECTED')" class="mo-ghost">Reject</button>
       </div>
-    </div>
-    <div class="mt-3 text-sm"><b>Items:</b><div *ngFor="let it of items" class="text-slate-600">{{ it.species }} → {{ it.required_quantity }} kg → min score {{ it.minimum_quality_score }}</div></div>
-    <div *ngIf="validation" class="mt-3 text-sm rounded-lg border px-3 py-2" [ngClass]="validation.ok ? 'bg-emerald-50 border-emerald-200' : 'bg-amber-50 border-amber-200'">{{ validation.msg }}</div>
-    <div *ngIf="alloc" class="mt-3 text-sm rounded-lg border border-indigo-200 bg-indigo-50 px-3 py-2">
-      <b>Allocation result:</b> {{ allocMsg }}<div *ngFor="let a of allocLines">{{ a }}</div>
-      <a *ngIf="exportLink" [routerLink]="exportLink" class="text-indigo-700 font-bold">Open export group →</a>
+      <div class="mo-row" style="margin-top:.8rem;">
+        <button (click)="validate()" class="mo-pill mo-aqua" style="border:0;flex:1;">Validate</button>
+        <button *ngIf="canManage()" (click)="allocate()" class="mo-pill mo-cyan" style="border:0;flex:1;">Smart Allocate</button>
+      </div>
+      <div *ngIf="validation" class="mo-note rounded-2xl border px-3 py-2" [ngClass]="validation.ok ? 'bg-emerald-50 border-emerald-200' : 'bg-amber-50 border-amber-200'">{{ validation.msg }}</div>
+      <div *ngIf="alloc" class="mt-3 text-sm rounded-2xl border border-indigo-200 bg-indigo-50 px-3 py-2">
+        <b>Allocation result:</b> {{ allocMsg }}<div *ngFor="let a of allocLines">{{ a }}</div>
+        <a *ngIf="exportLink && canManage()" [routerLink]="exportLink" class="text-indigo-700 font-bold">Open export group →</a>
+      </div>
     </div>
   </div>`
 })
@@ -35,7 +39,9 @@ export class OrderDetailComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private api = inject(ApiService);
   private toast = inject(ToastService);
+  auth = inject(AuthService);
   o: any = null; items: any[] = []; validation: any = null; alloc: any = null; allocMsg = ''; allocLines: string[] = []; exportLink: any = null;
+  canManage() { return this.auth.role === 'ADMIN' || this.auth.role === 'EXPORTER'; }
   id() { return this.route.snapshot.paramMap.get('id'); }
   ngOnInit() { this.load(); }
   load() {

@@ -15,7 +15,7 @@ import { StatusBadgeComponent } from '../shared/status-badge.component';
       <a routerLink="/dashboard" class="text-sm font-bold text-ocean-dark">Dashboard</a></div>
     <div *ngIf="loading" class="card"><span class="spinner"></span> Resolving {{ code }} from live API…</div>
     <div *ngIf="!loading && !data" class="card text-center py-10">
-      <div class="text-3xl">🔍</div><h1 class="font-extrabold text-navy mt-2">No trace found for {{ code }}</h1>
+      <div class="text-slate-300" aria-hidden="true"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></div><h1 class="font-extrabold text-navy mt-2">No trace found for {{ code }}</h1>
       <p class="text-sm text-slate-500">Fetched GET /api/traceability/{{ code }} — check the code or scan another QR.</p></div>
     <div *ngIf="data" class="space-y-4">
       <div class="card text-center">
