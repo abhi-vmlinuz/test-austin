@@ -1,0 +1,57 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body { @apply bg-slate-100 text-slate-800 font-sans antialiased; }
+
+.card { @apply bg-white rounded-xl shadow-sm border border-slate-200 p-5; }
+.btn-primary { @apply bg-navy text-white px-5 py-2.5 rounded-lg font-semibold hover:bg-navy-900 transition text-sm; }
+.btn-ocean { @apply bg-ocean text-white px-5 py-2.5 rounded-lg font-semibold hover:bg-ocean-dark transition text-sm; }
+.btn-outline { @apply border border-slate-300 px-5 py-2.5 rounded-lg font-semibold hover:bg-slate-50 transition text-sm; }
+.input { @apply w-full border border-slate-300 rounded-lg px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-ocean focus:border-ocean bg-white; }
+.label { @apply block text-xs font-semibold uppercase tracking-wide text-slate-500 mb-1.5; }
+.table-wrap { @apply overflow-x-auto bg-white rounded-xl border border-slate-200 shadow-sm; }
+table.data { @apply min-w-full text-sm; }
+table.data thead th { @apply text-left text-xs font-semibold uppercase tracking-wider text-slate-500 bg-slate-50 px-4 py-3 border-b; }
+table.data tbody td { @apply px-4 py-3 border-b border-slate-100; }
+table.data tbody tr:hover { @apply bg-slate-50; }
+
+.badge { @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold tracking-wide whitespace-nowrap; }
+.badge-AVAILABLE { @apply badge bg-blue-100 text-blue-800; }
+.badge-CREATED { @apply badge bg-slate-200 text-slate-700; }
+.badge-PROCESSING { @apply badge bg-amber-100 text-amber-800; }
+.badge-PROCESSED { @apply badge bg-teal-100 text-teal-800; }
+.badge-WAITING_FOR_QUALITY { @apply badge bg-purple-100 text-purple-800; }
+.badge-USABLE { @apply badge bg-emerald-100 text-emerald-800; }
+.badge-NON-USABLE, .badge-NON_USABLE { @apply badge bg-rose-100 text-rose-800; }
+.badge-RESERVED { @apply badge bg-orange-100 text-orange-800; }
+.badge-PARTIALLY_RESERVED { @apply badge bg-orange-100 text-orange-800; }
+.badge-PACKED { @apply badge bg-indigo-100 text-indigo-800; }
+.badge-IN_TRANSIT { @apply badge bg-cyan-100 text-cyan-800; }
+.badge-DELIVERED { @apply badge bg-green-100 text-green-800; }
+.badge-READY { @apply badge bg-emerald-100 text-emerald-800; }
+.badge-DISPATCHED { @apply badge bg-blue-100 text-blue-800; }
+.badge-ARRIVED { @apply badge bg-teal-100 text-teal-800; }
+.badge-PLACED { @apply badge bg-slate-200 text-slate-700; }
+.badge-ACCEPTED { @apply badge bg-blue-100 text-blue-800; }
+.badge-ALLOCATED { @apply badge bg-indigo-100 text-indigo-800; }
+.badge-SHIPPED { @apply badge bg-cyan-100 text-cyan-800; }
+.badge-COMPLETED { @apply badge bg-green-100 text-green-800; }
+.badge-REJECTED, .badge-CANCELLED { @apply badge bg-rose-100 text-rose-800; }
+.badge-EXHAUSTED { @apply badge bg-slate-300 text-slate-700; }
+
+/* vertical timeline */
+.tl { @apply relative pl-8; }
+.tl::before { content:""; @apply absolute left-2.5 top-2 bottom-2 w-0.5 bg-slate-200; }
+.tl-item { @apply relative pb-6; }
+.tl-dot { @apply absolute -left-8 top-0.5 w-5 h-5 rounded-full border-[3px] flex items-center justify-center bg-white; }
+
+/* landing */
+.hero-overlay { background: linear-gradient(180deg, rgba(7,26,46,.72) 0%, rgba(7,26,46,.55) 45%, rgba(7,26,46,.85) 100%); }
+@keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+.entrance { animation: rise .9s cubic-bezier(.22,1,.36,1) both; }
+::selection { background: #00B4D8; color: #fff; }
+:focus-visible { outline: 2px solid #00B4D8; outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) { .entrance { animation: none; } }
+input[type="range"] { @apply w-full accent-cyan-600; }
+.spinner { @apply inline-block w-4 h-4 border-2 border-slate-300 border-t-ocean rounded-full animate-spin; }
